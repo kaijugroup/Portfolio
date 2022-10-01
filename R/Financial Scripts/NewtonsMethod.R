@@ -3,19 +3,25 @@
 
 newtons <- function(n, a, b) {
   i <- 0
-  g = (a+b)/2
+  g = (a+b)/2 #starting guess for the middle of the range
   while (i<=n) {
-    g+1
+    x <- f1(g)
+    dx <- df1(g)
+    ng <- g - (x/dx)
+    g <- ng
+    i <- i+1
   }
-  return(g)
+  g
 }
 
 f1 <- function(x) {
-  y <- x+1
+  y <- (10000*x^3)-(400*x^2)-(500*x)-10600  #input function
   return(y)
 }
 
 df1 <- function(x) {
-  y <- 1
+  y <- (30000*x^2)-(800*x)-500 #input first derivative of function
   return(y)
 }
+
+newtons(100, 1, 2)
