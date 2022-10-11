@@ -15,13 +15,13 @@ newtons <- function(n, a, b) {
 }
 
 f1 <- function(x) {
-  y <- ((1+x)^10)+9-(10*x)  #input function
+  y <- cos(x)-x  #input function
   return(y)
 }
 
 df1 <- function(x) {
-  y <- 10*(((1+x)^9)-1) #input first derivative of function
+  y <- (-sin(x))-1  #input first derivative of function
   return(y)
 }
 
-newtons(10000, 1, 1.5)
+newtons(10000, 0, 2)
