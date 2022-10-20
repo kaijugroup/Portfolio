@@ -37,6 +37,19 @@ colnum = shape[1] #Number of columns for test data
 #The columns that will be used as variables for the logistic regression algorithm will be columns 2-14,
 #13 in total.
 
+#Creating a dataframe of the columns to be used for training and then normalizing.
+
+temptd = testdata.iloc[:, [2,3,4,5,6,7,8,9,10,11,12,13,14]]
+
+i=0
+for col in temptd.columns:
+    powcol = temptd[col].apply(lambda x: x*x)
+    sumcol = sum(powcol)
+    sqcol = math.sqrt(sumcol)
+    newcol = temptd.iloc[i].apply(lambda x: x/sqcol)
+    temptd.assign(col=newcol)
+    i+=1
+
 #Logistic regression algorithm.  Binary classification, 1 for smoke detected, 0 for no smoke detected.
 
 #Coefficients of each column. cf[0:12] are coefficients for the variable input from the columns. cf[13] is the coefficient not associated with a variable.
@@ -49,42 +62,43 @@ def logreg(s):
    p = 1/denom
    return(p)
 
-def cftrain(ilg, aflag):
-    #Inputs: ilg = initial logistic regression result, aflag = indicator if the alarm was triggered or not 
-    flags = [0,0,0,0,0,0,0,0,0,0,0,0,0,0] #flags indicating for each variable how they should be modified
-    tempcf = cf
-
-    if aflag==0:
-        for i in cf:
-            if i==0:
-                continue
-            else:
-                continue
-    elif aflag==1:
-        for i in cf:
-            newi = i-0.1
-            newlg = logreg(
-
-
 def train():
     i = 1
     while i < 10:
-        row = testdata.iloc[i]
-        var = row[2:15]
-        aflag = row[15]
+        row = testdata.iloc[[i]].to_numpy()
+        aflag = row[0,15]
+        var = row[0, 2:15]
+        var.flatten()
 
         initlg = logreg(var)
+        j=0
         if aflag==0 and initlg>0.02:
             #change the coefficients until they reflect a lower logreg result
+            while j < 13:
+                diff = abs(var[j]-cf[j])
+                new = cf[j]-(diff*0.1)
+                cf[j] = new
+                j+=1
+            i+=1
             continue
         elif aflag==1 and initlg<0.98:
             #change the coefficients until they reflect a larger logreg result
+            while j < 14:
+                diff = abs(var[j]-cf[j])
+                new = cf[j]-(diff*0.1)
+                cf[j] = new
+                j+=1
+            i+=1
             continue
         else:
+            i+=1
             continue
 
+print(cf)
 
 train()
+
+print(cf)
 
 #Testing statistics
 
