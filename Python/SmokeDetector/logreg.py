@@ -71,10 +71,10 @@ def logreg(s):
     v13 = cf[13]
     var = [v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13]
     poly = v0+v1+v2+v3+v4+v5+v6+v7+v8+v9+v10+v11+v12+v13
-    if poly < 0.000001:
-        poly = 0
-    else:
-        poly = rd(poly)
+    #if poly < 0.000001:
+        #poly = 0
+    #else:
+       # poly = rd(poly)
     denom = 1 + np.exp(-poly)
     p = rd(1/denom)
     return(p)
@@ -96,12 +96,12 @@ def inputproc(row):
 def train():
     i = 0
     #when its working (rownum-1)
-    while i < 2000:
+    while i < 1500:
         var = inputproc(traindata.loc[i])
         aflag = var[13]
 
         initlg = logreg(var)
-        if aflag==0 and initlg>0.02:
+        if aflag==0 and initlg>0.001:
             #change the coefficients until they reflect a lower logreg result
             j=0
             while j < 13:
@@ -110,7 +110,7 @@ def train():
                 cf[j] = rd(new)
                 j+=1
             cf[13] = rd(cf[13] - (abs(1-initlg)*0.01))
-        elif aflag==1 and initlg<0.98:
+        elif aflag==1 and initlg<0.999:
             #change the coefficients until they reflect a larger logreg result
             j=0
             while j < 14:
